@@ -35,4 +35,9 @@ public class TestController {
         }
         return new JsonResult();
     }
+
+    @GetMapping("/{name}")
+    public String testAop(@PathVariable String name) {
+        return "Hello " + name;
+    }
 }
