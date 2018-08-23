@@ -6,7 +6,7 @@ logging:
     learning: trace
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/ALON_FANFAN
+    url: jdbc:mysql://127.0.0.1:3306/ALON_FANFAN?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -31,5 +31,7 @@ spring:
 mybatis:
   #实体类所做包
   type-aliases-package: com.fanfan.alon.models
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰命名规范
   #mapper.xml所在位置
   mapper-locations: classpath:/mappers/*.xml
