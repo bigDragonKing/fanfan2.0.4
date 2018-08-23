@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @auther: zoujiulong
  * @date: 2018/8/20   18:13
  */
-
 @EnableScheduling
 @EnableCaching
 @SpringBootApplication
