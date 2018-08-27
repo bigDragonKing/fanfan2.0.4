@@ -30,11 +30,11 @@ public class MyInterceptor implements HandlerInterceptor {
         }
 
         // 判断用户有没有登陆，一般登陆之后的用户都有一个对应的token
-        String token = request.getParameter("token");
-        if (null == token || "".equals(token)) {
-            logger.info("用户未登录，没有权限执行……请登录");
-            return false;
-        }
+//        String token = request.getParameter("token");
+//        if (null == token || "".equals(token)) {
+//            logger.info("用户未登录，没有权限执行……请登录");
+//            return false;
+//        }
 
         // 返回true才会继续执行，返回false则取消当前请求
         return true;
