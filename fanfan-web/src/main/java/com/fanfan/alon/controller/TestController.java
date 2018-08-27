@@ -6,6 +6,7 @@ import com.fanfan.alon.models.FanPersion;
 import com.fanfan.alon.result.JsonResult;
 import com.fanfan.alon.service.FanPersionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-@RestController
+@Controller
 @RequestMapping("/test")
 public class TestController {
 
@@ -24,11 +25,11 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(){
-        return "hello";
+        return "map";
     }
 
     @PostMapping("/test")
-    public JsonResult test(@RequestParam("name") String name,@RequestParam("pass") String pass){
+    public JsonResult test1(@RequestParam("name") String name,@RequestParam("pass") String pass){
         return new JsonResult();
     }
 

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9000
 
 logging:
   level:
@@ -21,11 +21,13 @@ spring:
     cache: false
     request-context-attribute: request
     #模板加载的位置
-    template-loader-path: classpath:/templates
-    #前缀
-    suffix: .htm
-    #后缀
-    prefix: /htm/
+    template-loader-path: classpath:/templates/
+    enabled:  true
+    charset:  UTF-8
+    #后缀名
+    suffix: .html
+    #
+    prefix:
 
 
 mybatis:
@@ -33,5 +35,5 @@ mybatis:
   type-aliases-package: com.fanfan.alon.models
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名规范
-  #mapper.xml所在位置
+  #mapper.xml所在位置prefix
   mapper-locations: classpath:/mappers/*.xml
