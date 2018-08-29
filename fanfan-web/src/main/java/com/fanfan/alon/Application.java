@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @date: 2018/8/20   18:13
  */
 @EnableScheduling
-@EnableCaching
+//@EnableCaching
 @SpringBootApplication
 @MapperScan("com.fanfan.alon.map")
 public class Application {

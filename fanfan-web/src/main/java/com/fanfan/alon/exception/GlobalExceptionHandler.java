@@ -1,6 +1,6 @@
 package com.fanfan.alon.exception;
 
-import com.fanfan.alon.result.JsonResult;
+import com.fanfan.alon.utils.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     public JsonResult handleHttpMessageNotReadableException(
             MissingServletRequestParameterException ex) {
         logger.error("缺少请求参数，{}", ex.getMessage());
-        return new JsonResult("400", "缺少必要的请求参数");
+        return JsonResult.error(400, "缺少必要的请求参数");
     }
 
     /**
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public JsonResult handleTypeMismatchException(NullPointerException ex) {
         logger.error("空指针异常，{}", ex.getMessage());
-        return new JsonResult("500", "空指针异常了");
+        return JsonResult.error(500, "空指针异常了");
     }
 
     /**
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public JsonResult handleUnexpectedServer(Exception ex) {
         logger.error("系统异常：", ex);
-        return new JsonResult("500", "系统发生异常，请联系管理员");
+        return JsonResult.error(500, "系统发生异常，请联系管理员");
     }
 
     /**
@@ -72,6 +72,6 @@ public class GlobalExceptionHandler {
     public JsonResult handleBusinessError(BusinessErrorException ex) {
         String code = ex.getCode();
         String message = ex.getMessage();
-        return new JsonResult(code, message);
+        return JsonResult.error(Integer.valueOf(code), message);
     }
 }

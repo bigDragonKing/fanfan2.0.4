@@ -3,8 +3,8 @@ package com.fanfan.alon.controller;
 import com.fanfan.alon.enums.BusinessMsgEnum;
 import com.fanfan.alon.exception.BusinessErrorException;
 import com.fanfan.alon.models.FanPersion;
-import com.fanfan.alon.result.JsonResult;
 import com.fanfan.alon.service.FanPersionService;
+import com.fanfan.alon.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,7 @@ public class TestController {
     }
 
     @PostMapping("/test")
-    public JsonResult test1(@RequestParam("name") String name,@RequestParam("pass") String pass){
+    public JsonResult test1(@RequestParam("name") String name, @RequestParam("pass") String pass){
         return new JsonResult();
     }
 

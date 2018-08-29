@@ -2,7 +2,6 @@ package com.fanfan.alon.listener;
 
 import com.fanfan.alon.event.MyEvent;
 import com.fanfan.alon.models.FanPersion;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
