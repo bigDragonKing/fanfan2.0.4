@@ -3,9 +3,12 @@ package com.fanfan.alon.utils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,6 +35,15 @@ public class DateUtils {
     }
 
     /**
+     * 日期格式化 日期格式为：yyyy-MM-dd HH:mm:ss
+     * @param date  日期
+     * @return  返回yyyy-MM-dd HH:mm:ss格式日期
+     */
+	public static String formatDate(Date date) {
+        return format(date, DATE_TIME_PATTERN);
+    }
+
+    /**
      * 日期格式化 日期格式为：yyyy-MM-dd
      * @param date  日期
      * @param pattern  格式，如：DateUtils.DATE_TIME_PATTERN
@@ -55,8 +67,14 @@ public class DateUtils {
             return null;
         }
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
-        return fmt.parseLocalDateTime(strDate).toDate();
+        SimpleDateFormat fmt = new SimpleDateFormat(pattern);
+        Date date = null;
+        try {
+            date = fmt.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /**
