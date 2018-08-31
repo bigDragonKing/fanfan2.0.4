@@ -11,10 +11,8 @@ import com.fanfan.alon.models.SysUserEntity;
 import com.fanfan.alon.service.SysDeptService;
 import com.fanfan.alon.service.SysUserRoleService;
 import com.fanfan.alon.service.SysUserService;
-import com.fanfan.alon.utils.Constant;
-import com.fanfan.alon.utils.PageUtils;
-import com.fanfan.alon.utils.Query;
-import com.fanfan.alon.utils.ShiroUtils;
+import com.fanfan.alon.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,7 @@ import java.util.Map;
  * @date: 2018/8/28   17:55
  */
 @Service("sysUserService")
+@Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
@@ -56,7 +55,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				.like(StringUtils.isNotBlank(username),"username", username)
 				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);
-
 		for(SysUserEntity sysUserEntity : page.getRecords()){
 			SysDeptEntity sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
 			sysUserEntity.setDeptName(sysDeptEntity.getName());
@@ -69,6 +67,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Transactional(rollbackFor = Exception.class)
 	public void save(SysUserEntity user) {
 		user.setCreateTime(new Date());
+		user.setUpdateTime(new Date());
 		//sha256加密
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setSalt(salt);
@@ -87,6 +86,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		}else{
 			user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
 		}
+		user.setUpdateTime(new Date());
 		this.updateById(user);
 		
 		//保存用户与角色关系

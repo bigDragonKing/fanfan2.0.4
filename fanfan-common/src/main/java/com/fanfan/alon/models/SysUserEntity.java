@@ -78,6 +78,9 @@ public class SysUserEntity implements Serializable {
 	 */
 	private Date createTime;
 
+	/**更新时间*/
+	private Date updateTime;
+
 	/**
 	 * 部门ID
 	 */
@@ -200,6 +203,14 @@ public class SysUserEntity implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public List<Long> getRoleIdList() {

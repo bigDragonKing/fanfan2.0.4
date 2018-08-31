@@ -12,11 +12,13 @@ import com.fanfan.alon.validator.Assert;
 import com.fanfan.alon.validator.ValidatorUtils;
 import com.fanfan.alon.validator.group.AddGroup;
 import com.fanfan.alon.validator.group.UpdateGroup;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class SysUserController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	
+
 	/**
 	 * 所有用户列表
 	 */
