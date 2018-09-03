@@ -32,6 +32,11 @@
             <artifactId>fanfan-pay</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.fanfan</groupId>
+            <artifactId>fanfan-es</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -157,6 +162,10 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
         </dependency>
     </dependencies>
 
