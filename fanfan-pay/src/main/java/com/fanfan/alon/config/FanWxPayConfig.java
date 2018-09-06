@@ -8,28 +8,28 @@ package com.fanfan.alon.config;
  * @date: 2018/9/3   16:47
  */
 public class FanWxPayConfig {
-    //微信号 wx0bb8cf1c2d8693d6
+    //微信号
     private String appId;
-    //商户id,如：1498420732
-    private String partnerId;
-    //商户密钥 如：c9f0954adfa6481a3fd3d7d76
-    private String partnerKey;
+    //商户id
+    private String mchId;
+    //商户密钥
+    private String key;
     public String getAppId() {
         return appId;
     }
     public void setAppId(String appId) {
         this.appId = appId;
     }
-    public String getPartnerId() {
-        return partnerId;
+    public String getMchId() {
+        return mchId;
     }
-    public void setPartnerId(String partnerId) {
-        this.partnerId = partnerId;
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
     }
-    public String getPartnerKey() {
-        return partnerKey;
+    public String getKey() {
+        return key;
     }
-    public void setPartnerKey(String partnerKey) {
-        this.partnerKey = partnerKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 }

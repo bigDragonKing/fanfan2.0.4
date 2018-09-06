@@ -43,6 +43,11 @@ spring:
     suffix: .html
     #
     prefix:
+  #ES的配置信息
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 127.0.0.1:9300
 fanfan:
   redis:
     open: false  # 是否开启redis缓存  true开启   false关闭
