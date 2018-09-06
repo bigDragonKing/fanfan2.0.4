@@ -23,12 +23,10 @@ public class BookService extends TransportClientRepository{
         super(transportClient);
     }
 
-    @Override
     public String indexName() {
         return "book_index_7";
     }
 
-    @Override
     public String typeName() {
         return "book_type_7";
     }
