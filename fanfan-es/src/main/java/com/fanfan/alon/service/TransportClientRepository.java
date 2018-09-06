@@ -1,10 +1,7 @@
 package com.fanfan.alon.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fanfan.alon.core.ESearchTypeColumn;
-import com.fanfan.alon.core.ElasticSearchPage;
-import com.fanfan.alon.core.ElasticSearchQuery;
-import com.fanfan.alon.core.EsBaseData;
+import com.fanfan.alon.core.*;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
@@ -28,7 +25,10 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,16 +44,32 @@ import java.util.List;
 public abstract class TransportClientRepository {
 
     private TransportClient transportClient;
+    private String indexName;
+
+    private String typeName;
 
     public TransportClientRepository(TransportClient transportClient) {
         this.transportClient = transportClient;
+        // 获取泛型类的注解
+        Annotation annotation = ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getAnnotation(EsEntity.class);
+        Method[] declaredMethods = annotation.annotationType().getDeclaredMethods();
+        for (int i = 0; i < declaredMethods.length; i++) {
+            if (!declaredMethods[i].isAccessible()){
+                declaredMethods[i].setAccessible(true);
+            }
+            try {
+                // 获取注解的值
+                Object invoke = declaredMethods[i].invoke(annotation, null);
+                if (i==0){
+                    this.typeName = invoke.toString();
+                }else {
+                    this.indexName = invoke.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
-
-    public abstract String indexName();
-
-    public abstract String typeName();
-
-
     /**
      * 保存document记录数据
      *
@@ -68,7 +84,7 @@ public abstract class TransportClientRepository {
             // java对象转为json字符串
             String builder = JSONObject.toJSONString(doc);
             // WriteRequest.RefreshPolicy.IMMEDIATE 为设置对数据进行操作后马上刷新ES
-            IndexResponse response = transportClient.prepareIndex(indexName(), typeName()).setId(id).
+            IndexResponse response = transportClient.prepareIndex(indexName, typeName).setId(id).
                     setSource(builder).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE).get();
             return response.getId();
         } catch (Exception e) {
@@ -89,7 +105,7 @@ public abstract class TransportClientRepository {
 
         try {
             String o = JSONObject.toJSONString(doc);
-            IndexResponse response = transportClient.prepareIndex(indexName(), typeName()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE).setId(id).setSource(o).setParent(pid).get();
+            IndexResponse response = transportClient.prepareIndex(indexName, typeName).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE).setId(id).setSource(o).setParent(pid).get();
             return response.getId();
         } catch (Exception e) {
             return null;
@@ -106,7 +122,7 @@ public abstract class TransportClientRepository {
 
         try {
             String builder = JSONObject.toJSONString(doc);
-            UpdateResponse response = transportClient.prepareUpdate(indexName(), typeName(), doc.getId()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
+            UpdateResponse response = transportClient.prepareUpdate(indexName, typeName, doc.getId()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
                     .setId(doc.getId()).setDoc(builder).get();
             return response.getId();
         } catch (Exception e) {
@@ -125,7 +141,7 @@ public abstract class TransportClientRepository {
     public String updateDoc(EsBaseData doc, String pid) {
         try {
             String builder = JSONObject.toJSONString(doc);
-            UpdateResponse response = transportClient.prepareUpdate(indexName(), typeName(), doc.getId()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
+            UpdateResponse response = transportClient.prepareUpdate(indexName, typeName, doc.getId()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
                     .setId(doc.getId()).setParent(pid).setDoc(builder).get();
             return response.getId();
         } catch (Exception e) {
@@ -147,7 +163,7 @@ public abstract class TransportClientRepository {
             for (int i = 0, b = docs.size(); i < b; i++) {
                 String id = docs.get(i).getId();
                 String o = JSONObject.toJSONString(docs.get(i));
-                bulkRequest.add(transportClient.prepareIndex(indexName(), typeName()).setId(id).setSource(o));
+                bulkRequest.add(transportClient.prepareIndex(indexName, typeName).setId(id).setSource(o));
             }
             bulkRequest.execute().actionGet();
             return true;
@@ -170,7 +186,7 @@ public abstract class TransportClientRepository {
         try {
             BulkRequestBuilder bulkRequest = transportClient.prepareBulk().setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
             for (int i = 0, b = docs.size(); i < b; i++) {
-                bulkRequest.add(transportClient.prepareUpdate(indexName(), typeName(), docs.get(i).getId()).setDoc(JSONObject.toJSONString(docs.get(i))));
+                bulkRequest.add(transportClient.prepareUpdate(indexName, typeName, docs.get(i).getId()).setDoc(JSONObject.toJSONString(docs.get(i))));
 
             }
             BulkResponse responses = bulkRequest.execute().actionGet();
@@ -190,7 +206,7 @@ public abstract class TransportClientRepository {
      */
     public String deleteById(String id) {
 
-        DeleteRequestBuilder requestBuilder = transportClient.prepareDelete(indexName(), typeName(), id).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+        DeleteRequestBuilder requestBuilder = transportClient.prepareDelete(indexName, typeName, id).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
         DeleteResponse response = requestBuilder.get();
         return response.getId();
     }
@@ -206,7 +222,7 @@ public abstract class TransportClientRepository {
             BulkRequestBuilder bulkRequestdel = transportClient.prepareBulk().setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
             for (int i = 0, b = ids.size(); i < b; i++) {
                 String id = ids.get(i);
-                bulkRequestdel.add(transportClient.prepareDelete(indexName(), typeName(), id));
+                bulkRequestdel.add(transportClient.prepareDelete(indexName, typeName, id));
             }
             bulkRequestdel.execute().actionGet(); // 删除
             return true;
@@ -224,7 +240,7 @@ public abstract class TransportClientRepository {
      * @return
      */
     public String getIdx(String id) {
-        GetResponse response = transportClient.prepareGet(indexName(), typeName(), id).get();
+        GetResponse response = transportClient.prepareGet(indexName, typeName, id).get();
         if (response.isExists()) {
             return response.getSourceAsString();
         }
@@ -251,8 +267,8 @@ public abstract class TransportClientRepository {
 
                 System.out.println(o);
 
-                bulkRequestdel.add(transportClient.prepareDelete(indexName(), typeName(), id));
-                bulkRequest.add(transportClient.prepareIndex(indexName(), typeName()).setId(id).setSource(o));
+                bulkRequestdel.add(transportClient.prepareDelete(indexName, typeName, id));
+                bulkRequest.add(transportClient.prepareIndex(indexName, typeName).setId(id).setSource(o));
 
             }
             bulkRequestdel.execute().actionGet(); // 删除
@@ -282,7 +298,7 @@ public abstract class TransportClientRepository {
                                                  QueryBuilder builder, Class<T> tClass) {
         // 设置起始页码
         int start = page.getPageNum() > 2 ? page.getPageNum() * page.getPageSize() : 0;
-        SearchResponse response = transportClient.prepareSearch(indexName()).setTypes(typeName())
+        SearchResponse response = transportClient.prepareSearch(indexName).setTypes(typeName)
                 .setQuery(builder).setSearchType(SearchType.QUERY_THEN_FETCH)
                 .setFrom(start)
                 .setSize(page.getPageSize()).get();
@@ -318,7 +334,7 @@ public abstract class TransportClientRepository {
 
         int start = page.getPageNum() > 2 ? page.getPageNum() * page.getPageSize() : 0;
         SearchResponse response = null;
-        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(indexName()).setTypes(typeName())
+        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(indexName).setTypes(typeName)
                 .setQuery(query.getQueryBuilder()).setSearchType(SearchType.QUERY_THEN_FETCH)
                 .setFrom(start)
                 .setSize(page.getPageSize());
@@ -373,14 +389,14 @@ public abstract class TransportClientRepository {
             }
             builder.endObject();
             builder.endObject();
-            if("ik_pinyin_analyzer".equals(analyzer) && !isIndexExist(indexName()) && !synonym){
-                createPinYinIndex(indexName());
+            if("ik_pinyin_analyzer".equals(analyzer) && !isIndexExist(indexName) && !synonym){
+                createPinYinIndex(indexName);
             }else if (synonym){
-                createPinYinIndexWithSynonym(indexName());
-            }else if (!isIndexExist(indexName())){
-                createIndex(indexName());
+                createPinYinIndexWithSynonym(indexName);
+            }else if (!isIndexExist(indexName)){
+                createIndex(indexName);
             }
-            PutMappingRequest mapping = Requests.putMappingRequest(indexName()).type(typeName()).source(builder);
+            PutMappingRequest mapping = Requests.putMappingRequest(indexName).type(typeName).source(builder);
             transportClient.admin().indices().putMapping(mapping).actionGet();
             return "success";
         } catch (Exception e) {
