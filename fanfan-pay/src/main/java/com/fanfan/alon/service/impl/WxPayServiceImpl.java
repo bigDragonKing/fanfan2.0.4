@@ -18,7 +18,7 @@ import java.util.*;
 public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(WxPayServiceImpl.class);
-    private static String unifiedorder = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    protected final static String unifiedorder = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     private static String orderquery = "https://api.mch.weixin.qq.com/pay/orderquery";
     FanWxPayConfig fanWxPayConfig = new FanWxPayConfig();
     /**
@@ -30,18 +30,18 @@ public class WxPayServiceImpl implements WxPayService {
      */
     @Override
     public String wxScanPay() {
-        String appId = fanWxPayConfig.getAppId();
-        String mchId = fanWxPayConfig.getMchId();
-        String key = fanWxPayConfig.getKey();
+        String appId = "";//fanWxPayConfig.getAppId();
+        String mchId = "";//fanWxPayConfig.getMchId();
+        String key = "";//fanWxPayConfig.getKey();
         String nonceStr = NumberUtil.getRandomString(6);
 
-        BigDecimal orderFee = BigDecimal.valueOf(0.01); // 价格 单位是元
+        BigDecimal orderFee = BigDecimal.valueOf(1); // 价格 单位是元
         String body = "Alon扫码支付";   // 商品名称
-        String outTradeNo = "11338"; // 订单号
+        String outTradeNo = OrderNo.getOrderNo(); // 订单号
         // 获取发起电脑 ip
         String spbillCreateIp = "127.0.0.1";
         // 回调接口
-        String notifyUrl = "zoujiulong.dev.swiftpass.cn/wxpay/notify";
+        String notifyUrl = "http://zoujiulong.dev.swiftpass.cn/pay/notify";
         String tradeType = "NATIVE";
 
         Map<String, String> payParams = new HashMap<String, String>();
@@ -58,9 +58,10 @@ public class WxPayServiceImpl implements WxPayService {
         payParams.put("sign",sign);
         String xml = XmlUtils.toXml(payParams, true);
         logger.info("請求參數：" + xml);
-        String resXml = HttpClientUtil.postData(unifiedorder, xml);
+        String resXml = ClientUtils.post(unifiedorder, xml);
 
         Map map = XMLUtil.doXMLParse(resXml);
+        logger.info("响应参数：" + resXml);
         String urlCode = (String) map.get("code_url");
         return urlCode;
     }

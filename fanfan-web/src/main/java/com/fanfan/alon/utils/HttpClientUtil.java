@@ -1,24 +1,30 @@
 package com.fanfan.alon.utils;
 
-import com.fanfan.alon.constant.StringConstant;
-import com.fanfan.alon.service.impl.WxPayServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * 功能描述:Http客户端工具类
@@ -28,15 +34,12 @@ import java.util.Map;
  * @date: 2018/9/3   18:19
  */
 public class HttpClientUtil {
-
-	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
+	
 	public static final String SunX509 = "SunX509";
 	public static final String JKS = "JKS";
 	public static final String PKCS12 = "PKCS12";
 	public static final String TLS = "TLS";
-	private final static int CONNECT_TIMEOUT = 5000; // in milliseconds
-
-
+	
 	/**
 	 * 功能描述:get HttpURLConnection
 	 * @param: strUrl url地址
@@ -291,48 +294,6 @@ public class HttpClientUtil {
 	public static InputStream String2Inputstream(String str) {
 		return new ByteArrayInputStream(str.getBytes());
 	}
-
-	public static String postData(String urlStr, String data){
-		return postData(urlStr, data, null);
-	}
-
-	protected static String postData(String urlStr, String data, String contentType){
-		BufferedReader reader = null;
-		try {
-			URL url = new URL(urlStr);
-			URLConnection conn = url.openConnection();
-			conn.setDoOutput(true);
-			conn.setConnectTimeout(CONNECT_TIMEOUT);
-			conn.setReadTimeout(CONNECT_TIMEOUT);
-			if(contentType != null)
-				conn.setRequestProperty("content-type", contentType);
-			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), StringConstant.CHARSET_STRING);
-			if(data == null)
-				data = "";
-			writer.write(data);
-			writer.flush();
-			writer.close();
-
-			reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StringConstant.CHARSET_STRING));
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-				sb.append("\r\n");
-			}
-			return sb.toString();
-		} catch (IOException e) {
-			logger.error("Error connecting to " + urlStr + ": " + e.getMessage());
-		} finally {
-			try {
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-			}
-		}
-		return null;
-	}
-
 
 }
 

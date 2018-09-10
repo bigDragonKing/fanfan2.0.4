@@ -11,7 +11,7 @@ public interface WxPayService {
      * @auther: zoujiulong
      * @date: 2018/9/6   16:14
      */
-    public String wxScanPay();
+    String wxScanPay();
     /**
      * 功能描述:扫码回调
      * @param:
@@ -19,5 +19,5 @@ public interface WxPayService {
      * @auther: zoujiulong
      * @date: 2018/9/6   16:14
      */
-    public void wxNotify(HttpServletRequest request, HttpServletResponse response);
+    void wxNotify(HttpServletRequest request, HttpServletResponse response);
 }
