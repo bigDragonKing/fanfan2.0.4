@@ -4,6 +4,7 @@ import com.fanfan.alon.config.FanWxPayConfig;
 import com.fanfan.alon.constant.StringConstant;
 import com.fanfan.alon.service.WxPayService;
 import com.fanfan.alon.utils.*;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,18 +31,18 @@ public class WxPayServiceImpl implements WxPayService {
      */
     @Override
     public String wxScanPay() {
-        String appId = "";//fanWxPayConfig.getAppId();
-        String mchId = "";//fanWxPayConfig.getMchId();
-        String key = "";//fanWxPayConfig.getKey();
+        String appId = fanWxPayConfig.getAppId();//TODO 需要传入真实的公众号id
+        String mchId = fanWxPayConfig.getMchId();//TODO 需要传入真实的商户信息
+        String key = fanWxPayConfig.getKey();//TODO 需要传入真实的密钥
         String nonceStr = NumberUtil.getRandomString(6);
 
         BigDecimal orderFee = BigDecimal.valueOf(1); // 价格 单位是元
         String body = "Alon扫码支付";   // 商品名称
-        String outTradeNo = OrderNo.getOrderNo(); // 订单号
+        String outTradeNo = OrderNo.getOrderNo(); // 订单流水号和系统的订单号不是一个
         // 获取发起电脑 ip
-        String spbillCreateIp = "127.0.0.1";
+        String spbillCreateIp = "192.168.1.8";
         // 回调接口
-        String notifyUrl = "http://zoujiulong.dev.swiftpass.cn/pay/notify";
+        String notifyUrl = "http://dongdong.vicp.net/pay/notifyResult";
         String tradeType = "NATIVE";
 
         Map<String, String> payParams = new HashMap<String, String>();
@@ -184,5 +185,9 @@ public class WxPayServiceImpl implements WxPayService {
         } else{
             logger.info("通知签名验证失败");
         }
+    }
+
+    public void orderQuery(){
+
     }
 }

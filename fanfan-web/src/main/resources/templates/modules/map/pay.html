@@ -9,6 +9,12 @@
 <form id="pay_form" method="post" >
     <h1>可乐特价：0.1元/罐 <input id="pay_submit" name="but" type="button" value="微信支付"/></h1>
 </form>
+
+<input type="text" id="name" name="name" /><button onclick="connection()">链接</button><br>
+接收者名字：<input type="text" id="toUser" name="toUser"/><br>
+内容：<input type="text" id="toMessage" name="toMessage">
+<button onclick="sendMessage()">发送</button><br>
+<span id="webSocket"></span>
 </body>
 <script>
     $(function(){
@@ -56,5 +62,43 @@
     //         }
     //     });
     // }
+
+    var webSocket = null;
+    function connection(){
+        var userName = "";
+        if('WebSocket' in window){//判断当前浏览器是否支持websocket
+            webSocket = new WebSocket("ws://" + document.location.host + "/webSocket" + userName);
+        }else{
+            alert("什么鬼");
+        }
+        webSocket.onopen = function () {
+            $("#webSocket").html("建立链接");
+        };
+        webSocket.onmessage = function (event) {
+            alert(event.data);
+        };
+        webSocket.onerror = function () {
+            $("#webSocket").html("出现异常");
+        };
+        webSocket.onclose = function () {
+            $("#webSocket").html("链接关闭");
+        };
+        webSocket.onbeforeunload = function () {//当浏览器窗口关闭的时候，应该关闭链接，防止出现异常
+            if(webSocket != null){
+                webSocket.close();
+            }
+        }
+    }
+
+    function sendMessage(){
+        //获取到发送给谁
+        var toUser = $("#toUser").value();
+        //获取到发送的内容
+        var toMessage = $("#toMessage").value();
+        if(webSocket != null){
+            var message = '{"toUser":"'+toUser+'","toMessage":"'+toMessage+'"}';
+            webSocket.send(message);
+        }
+    }
 </script>
 </html>

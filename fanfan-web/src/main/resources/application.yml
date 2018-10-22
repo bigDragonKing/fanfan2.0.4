@@ -85,3 +85,13 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
+projecturl:
+  wechatMpAuthorize:  http://dongdong.vicp.net
+  wechatOpenAuthorize:  http://dongdong.vicp.net
+  sell: http://dongdong.vicp.net
+
+wechat:
+  mpAppId:
+  mpAppSecret:
+  openAppId:
+  openAppSecret:

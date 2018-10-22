@@ -69,6 +69,9 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
 
         filterMap.put("/statics/**", "anon");
+        filterMap.put("/wechat/**", "anon");
+        filterMap.put("/MP_verify_1qC3Vg8lmyHBTMBT.txt", "anon");
+        filterMap.put("/pay/notifyResult", "anon");
         filterMap.put("/login.html", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/favicon.ico", "anon");

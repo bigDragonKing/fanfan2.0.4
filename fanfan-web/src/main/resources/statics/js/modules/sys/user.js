@@ -23,15 +23,16 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'sys/user/list',
         datatype: "json",
-        colModel: [			
+        colModel: [
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
 			{ label: '用户名', name: 'username', width: 75 },
             { label: '所属部门', name: 'deptName', sortable: false, width: 75 },
 			{ label: '邮箱', name: 'email', width: 90 },
 			{ label: '手机号', name: 'mobile', width: 100 },
 			{ label: '状态', name: 'status', width: 60, formatter: function(value, options, row){
-				return value === 0 ? 
-					'<span class="label label-danger">禁用</span>' : 
+			    console.log(row['userId'])
+				return value === 0 ?
+					'<span class="label label-danger">禁用</span>' :
 					'<span class="label label-success">正常</span>';
 			}},
 			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85,
@@ -47,8 +48,8 @@ $(function () {
         height: 385,
         rowNum: 10,
 		rowList : [10,30,50],
-        rownumbers: true, 
-        rownumWidth: 25, 
+        rownumbers: true,
+        rownumWidth: 25,
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",

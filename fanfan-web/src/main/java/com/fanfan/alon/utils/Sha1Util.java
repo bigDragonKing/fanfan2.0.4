@@ -50,7 +50,7 @@ public class Sha1Util {
 
 		try {
 			MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
-			mdTemp.update(str.getBytes("GBK"));
+			mdTemp.update(str.getBytes());
 
 			byte[] md = mdTemp.digest();
 			int j = md.length;

@@ -16,6 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        registry.addResourceHandler("/MP_verify_1qC3Vg8lmyHBTMBT.txt").addResourceLocations("classpath:/MP_verify_1qC3Vg8lmyHBTMBT.txt");
+        registry.addResourceHandler("/wechat/**").addResourceLocations("classpath:/wechat/");
     }
 
 //    @Override

@@ -29,7 +29,6 @@ public class PayController {
     private WxPayService wxPayService;
 
     @RequestMapping(value = "/scanPay",method = RequestMethod.GET)
-    @ResponseBody
     public void qrcode(HttpServletRequest request, HttpServletResponse response,
                        ModelMap modelMap) {
         try {
@@ -55,8 +54,8 @@ public class PayController {
         }
     }
 
-    @PostMapping("/notify")
-    public void payNotify(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/notifyResult")
+    public void notifyResult(HttpServletRequest request, HttpServletResponse response){
         System.out.println("===========================微信支付回调==================================");
         wxPayService.wxNotify(request,response);
     }
