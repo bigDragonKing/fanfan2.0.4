@@ -12,4 +12,4 @@ spring boot 2.0.4
     redis
     websocket
     es框架
-    微信公众号开发、支付
+    微信支付
