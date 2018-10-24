@@ -16,4 +16,6 @@ public interface AdminWxPayConfigService extends IService<AdminWxpayConfig> {
      * 删除配置信息
      */
     public void deleteBatch(Long[] ids);
+
+    public AdminWxpayConfig selectByplatformId(Integer platformId);
 }

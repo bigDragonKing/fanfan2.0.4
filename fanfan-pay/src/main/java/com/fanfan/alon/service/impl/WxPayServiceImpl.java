@@ -20,7 +20,6 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(WxPayServiceImpl.class);
     protected final static String unifiedorder = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    private static String orderquery = "https://api.mch.weixin.qq.com/pay/orderquery";
     FanWxPayConfig fanWxPayConfig = new FanWxPayConfig();
     /**
      * 功能描述:扫码支付
@@ -30,10 +29,11 @@ public class WxPayServiceImpl implements WxPayService {
      * @date: 2018/9/6   15:36
      */
     @Override
-    public String wxScanPay() {
-        String appId = fanWxPayConfig.getAppId();//TODO 需要传入真实的公众号id
-        String mchId = fanWxPayConfig.getMchId();//TODO 需要传入真实的商户信息
-        String key = fanWxPayConfig.getKey();//TODO 需要传入真实的密钥
+    public String wxScanPay(FanWxPayConfig config) {
+        String appId = config.appId;
+        String mchId = config.mchId;
+        String key = config.key;
+        fanWxPayConfig.key = config.key;
         String nonceStr = NumberUtil.getRandomString(6);
 
         BigDecimal orderFee = BigDecimal.valueOf(1); // 价格 单位是元
@@ -132,7 +132,7 @@ public class WxPayServiceImpl implements WxPayService {
             packageParams.put(parameter, v);
         }
         // 账号信息
-        String key = fanWxPayConfig.getKey(); // key
+        String key = fanWxPayConfig.key; // key
         logger.info("解析结果：" + packageParams);
         //判断签名是否正确
         if(SignUtils.isTenpaySign("UTF-8", packageParams,key)) {

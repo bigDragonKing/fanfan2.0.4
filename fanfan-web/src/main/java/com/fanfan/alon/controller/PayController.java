@@ -1,5 +1,8 @@
 package com.fanfan.alon.controller;
 
+import com.fanfan.alon.config.FanWxPayConfig;
+import com.fanfan.alon.models.AdminWxpayConfig;
+import com.fanfan.alon.service.AdminWxPayConfigService;
 import com.fanfan.alon.service.WxPayService;
 import com.fanfan.alon.utils.QRUtil;
 import com.google.zxing.BarcodeFormat;
@@ -27,6 +30,8 @@ public class PayController {
 
     @Autowired
     private WxPayService wxPayService;
+    @Autowired
+    private AdminWxPayConfigService configService;
 
     @RequestMapping(value = "/scanPay",method = RequestMethod.GET)
     public void qrcode(HttpServletRequest request, HttpServletResponse response,
@@ -34,7 +39,12 @@ public class PayController {
         try {
             String productId = request.getParameter("productId");
             String userId = "user01";
-            String text = wxPayService.wxScanPay();
+            AdminWxpayConfig config = configService.selectByplatformId(1);//后台获取微信相关配置
+            FanWxPayConfig wxConfig = new FanWxPayConfig();
+            wxConfig.appId = config.getAppId();
+            wxConfig.mchId = config.getMchId();
+            wxConfig.key = config.getAppKey();
+            String text = wxPayService.wxScanPay(wxConfig);
             //根据url来生成生成二维码
             int width = 300;
             int height = 300;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanfan.alon.map.admin.AdminWxpayConfigDao">
+
+    <!-- 根据key，查询value -->
+    <select id="selectByplatformId" parameterType="Integer" resultType="com.fanfan.alon.models.AdminWxpayConfig">
+		select t.app_id,t.mch_id,t.app_key from admin_wxpay_config t where platform_id = #{platformId}
+	</select>
+
+</mapper>

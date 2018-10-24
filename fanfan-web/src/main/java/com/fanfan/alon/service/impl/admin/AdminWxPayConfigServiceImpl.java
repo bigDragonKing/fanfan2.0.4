@@ -69,4 +69,9 @@ public class AdminWxPayConfigServiceImpl extends ServiceImpl<AdminWxpayConfigDao
     public void deleteBatch(Long[] ids) {
         this.deleteBatchIds(Arrays.asList(ids));
     }
+
+    @Override
+    public AdminWxpayConfig selectByplatformId(Integer platformId) {
+        return configDao.selectByplatformId(platformId);
+    }
 }
