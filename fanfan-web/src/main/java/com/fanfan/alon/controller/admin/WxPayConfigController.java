@@ -61,4 +61,14 @@ public class WxPayConfigController {
 
         return JsonResult.ok().put("config", config);
     }
+    /**
+     * 删除配置
+     */
+    @SysLog("删除配置")
+    @PostMapping("/delete")
+    public JsonResult delete(@RequestBody Long[] ids){
+        adminWxPayConfigService.deleteBatch(ids);
+
+        return JsonResult.ok();
+    }
 }

@@ -12,4 +12,8 @@ public interface AdminWxPayConfigService extends IService<AdminWxpayConfig> {
 
     public void save(AdminWxpayConfigDto configDto);
     public void update(AdminWxpayConfigDto configDto);
+    /**
+     * 删除配置信息
+     */
+    public void deleteBatch(Long[] ids);
 }

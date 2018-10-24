@@ -2,7 +2,7 @@ $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'admin/config/list',
         datatype: "json",
-        colModel: [			
+        colModel: [
 			{ label: '编号', name: 'id', width: 30, key: true },
 			{ label: '所属平台', name: 'platformId', sortable: false, width: 60,
                 formatter:function(value,options,row){
@@ -58,8 +58,7 @@ $(function () {
         ],
 		viewrecords: true,
         height: 385,
-        rowNum: 5,
-        loadonce: true,
+        rowNum: 10,
 		rowList : [5,10,30,50],
         rownumbers: true,
         rownumWidth: 25, 
@@ -145,7 +144,7 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: baseURL + "sys/config/delete",
+				    url: baseURL + "admin/config/delete",
                     contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){

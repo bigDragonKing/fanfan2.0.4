@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.fanfan.alon.map.admin.AdminWxpayConfigDao;
 import com.fanfan.alon.models.AdminWxpayConfig;
+import com.fanfan.alon.models.SysConfigEntity;
 import com.fanfan.alon.service.AdminWxPayConfigService;
 import com.fanfan.alon.service.dto.AdminWxpayConfigDto;
 import com.fanfan.alon.utils.PageUtils;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -51,6 +53,7 @@ public class AdminWxPayConfigServiceImpl extends ServiceImpl<AdminWxpayConfigDao
     @Transactional(rollbackFor = Exception.class)
     public void update(AdminWxpayConfigDto configDto) {
         AdminWxpayConfig config = new AdminWxpayConfig();
+        config.setId(configDto.id);
         config.setPlatformId(configDto.platformId);
         config.setAppId(configDto.appId);
         config.setMchId(configDto.mchId);
@@ -58,6 +61,12 @@ public class AdminWxPayConfigServiceImpl extends ServiceImpl<AdminWxpayConfigDao
         config.setRemark(configDto.remark);
         config.setEnableStatus(configDto.enableStatus);
         config.setUpdateDate(new Date());
+        config.setUpdateVersion(this.selectById(configDto.id).getUpdateVersion()+1);
         this.updateAllColumnById(config);
+    }
+
+    @Override
+    public void deleteBatch(Long[] ids) {
+        this.deleteBatchIds(Arrays.asList(ids));
     }
 }
