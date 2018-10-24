@@ -92,7 +92,8 @@ public class WxPayServiceImpl implements WxPayService {
      * @date: 2018/9/6   15:48
      */
     @Override
-    public void wxNotify(HttpServletRequest request, HttpServletResponse response){
+    public Map<String,Object> wxNotify(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> result = new HashMap<>();
         //读取参数
         InputStream inputStream = null;
         BufferedReader in = null;
@@ -158,10 +159,12 @@ public class WxPayServiceImpl implements WxPayService {
                 //通知微信.异步确认成功.必写.不然会一直通知后台.八次之后就认为交易失败了.
                 resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                         + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                result.put("outTradeNo",outTradeNo);
             } else {
                 logger.info("支付失败,错误信息：" + packageParams.get("err_code"));
                 resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
                         + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+                result.put("outTradeNo",null);
             }
             //------------------------------
             //处理业务完毕
@@ -185,9 +188,6 @@ public class WxPayServiceImpl implements WxPayService {
         } else{
             logger.info("通知签名验证失败");
         }
-    }
-
-    public void orderQuery(){
-
+        return result;
     }
 }

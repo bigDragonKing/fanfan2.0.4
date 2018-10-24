@@ -69,13 +69,14 @@
         if('WebSocket' in window){//判断当前浏览器是否支持websocket
             webSocket = new WebSocket("ws://" + document.location.host + "/webSocket" + userName);
         }else{
-            alert("什么鬼");
+            alert("浏览器不支持webSocket");
         }
         webSocket.onopen = function () {
             $("#webSocket").html("建立链接");
         };
         webSocket.onmessage = function (event) {
             alert(event.data);
+            location.href = "http://www.baidu.com";
         };
         webSocket.onerror = function () {
             $("#webSocket").html("出现异常");

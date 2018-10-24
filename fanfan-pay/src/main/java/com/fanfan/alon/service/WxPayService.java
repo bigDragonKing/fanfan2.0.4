@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Service
 public interface WxPayService {
@@ -23,5 +24,5 @@ public interface WxPayService {
      * @auther: zoujiulong
      * @date: 2018/9/6   16:14
      */
-    void wxNotify(HttpServletRequest request, HttpServletResponse response);
+    Map<String,Object> wxNotify(HttpServletRequest request, HttpServletResponse response);
 }

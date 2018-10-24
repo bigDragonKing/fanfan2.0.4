@@ -5,12 +5,14 @@ import com.fanfan.alon.models.AdminWxpayConfig;
 import com.fanfan.alon.service.AdminWxPayConfigService;
 import com.fanfan.alon.service.WxPayService;
 import com.fanfan.alon.utils.QRUtil;
+import com.fanfan.alon.webSocket.WebSocketUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 import java.util.Hashtable;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/pay")
@@ -67,6 +71,20 @@ public class PayController {
     @RequestMapping(value = "/notifyResult")
     public void notifyResult(HttpServletRequest request, HttpServletResponse response){
         System.out.println("===========================微信支付回调==================================");
-        wxPayService.wxNotify(request,response);
+        Map<String,Object> result = wxPayService.wxNotify(request,response);
+//        if(result){
+//            Session session = WebSocketUtil.getAllClient().get("out_trade_no");
+//            if(null !=session){
+//                session.getAsyncRemote().sendText("支付成功");
+//            }
+//        }else {
+//            return;
+//        }
+        String outTradeNo = result.get("outTradeNo").toString();
+        if(StringUtils.isNotEmpty(outTradeNo)){
+            WebSocketUtil.sendMessage(outTradeNo,"支付成功");
+        }else{
+            WebSocketUtil.sendMessage("","支付失败");
+        }
     }
 }
