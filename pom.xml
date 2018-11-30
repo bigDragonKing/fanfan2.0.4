@@ -218,6 +218,12 @@
                 <artifactId>weixin-java-mp</artifactId>
                 <version>2.7.0</version>
             </dependency>
+            <!--jwt相关-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>0.9.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
