@@ -29,21 +29,6 @@ public class HttpClientUtil {
 	public static final String TLS = "TLS";
 	
 	/**
-	 * 功能描述:get HttpURLConnection
-	 * @param: strUrl url地址
-	 * @return: HttpURLConnection
-	 * @auther: zoujiulong
-	 * @date: 2018/9/3   18:19
-	 */
-	public static HttpURLConnection getHttpURLConnection(String strUrl)
-			throws IOException {
-		URL url = new URL(strUrl);
-		HttpURLConnection httpURLConnection = (HttpURLConnection) url
-				.openConnection();
-		return httpURLConnection;
-	}
-	
-	/**
 	 * 功能描述:get HttpsURLConnection
 	 * @param: strUrl url地址
 	 * @return: HttpsURLConnection
