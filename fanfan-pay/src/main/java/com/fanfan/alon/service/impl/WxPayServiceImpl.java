@@ -4,7 +4,6 @@ import com.fanfan.alon.config.FanWxPayConfig;
 import com.fanfan.alon.constant.StringConstant;
 import com.fanfan.alon.service.WxPayService;
 import com.fanfan.alon.utils.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

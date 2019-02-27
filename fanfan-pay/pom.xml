@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fanfan-pay</artifactId>
     <version>1.0</version>
-
+    <packaging>jar</packaging>
     <dependencies>
         <!-- httpclient -->
         <dependency>
